@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN" data-mode="github-pages">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f5f6f8">
+  <title>多日拼接分时图 · A股市场看板</title>
+  <link rel="stylesheet" href="./style.css?v=20261023-pages1">
+  <script src="./app.js?v=20261023-pages1" defer></script>
+</head>
+<body>
+  <!-- 页面为无构建静态应用；状态/公式/成分由同域/api接口读取，无外部CDN依赖。 -->
+  <main class="board" aria-label="A股多日拼接分时图看板">
+    <header>
+      <div class="heading"><h1>多日拼接分时图</h1><button id="formula" class="text-button">指标口径 <span>ⓘ</span></button></div>
+      <p class="instruction">滚轮缩放 · 按住拖拽平移 · 双击复位（手机：单指拖动 / 双指捏合缩放 / 轻点看数值）。日界用竖线分隔。</p>
+      <div class="toolbar">
+        <div class="index-controls" role="group" aria-label="指数曲线选择">
+          <button id="overlay" class="overlay" aria-pressed="true">指数叠加：开</button>
+          <div id="index-buttons"></div>
+        </div>
+        <div class="view-controls" role="group" aria-label="图表视图控制">
+          <button id="zoom-in" class="square" aria-label="放大图表">+</button>
+          <button id="zoom-out" class="square" aria-label="缩小图表">−</button>
+          <button id="reset" class="reset">复位</button>
+          <button id="structure-badge" class="structure-badge neutral" title="查看活跃股广度与结构口径">结构：等待数据</button>
+          <span class="point-count" aria-live="polite">已并入今日盘中实时 <b id="today-count">0</b> 点</span>
+        </div>
+      </div>
+      <div id="legend" class="legend" role="group" aria-label="图例，点击显示或隐藏曲线"></div>
+    </header>
+    <section class="chart-container" aria-label="多日拼接5分钟行情图">
+      <!-- Canvas显示曲线；键盘说明、按钮aria标签与明细表补充可访问性。 -->
+      <canvas id="chart" tabindex="0" aria-label="分时折线图。方向键查看数据，加减号缩放，数字0复位。"></canvas>
+      <div id="tooltip" class="tooltip" hidden></div>
+      <div id="empty" class="empty"><span class="loading-dot"></span> 正在准备行情截面…</div>
+    </section>
+    <footer>
+      <div class="source-info"><span id="source-badge" class="source-badge">正在连接</span><span id="updated">等待数据</span><span class="separator">·</span><span id="range-label">5分钟周期</span></div>
+      <div class="footer-controls"><label for="days">拼接</label><select id="days" aria-label="拼接交易日数"><option value="5">5个交易日</option><option value="10">10个交易日</option><option value="16" selected>16个交易日</option></select><span class="interval">5 min</span><button id="refresh" class="text-button" title="立即刷新页面数据">刷新 ↻</button></div>
+    </footer>
+    <div id="notice" class="notice" role="status" hidden></div>
+  </main>
+  <p class="below-note">活跃股等权（ASI5m）<span> / </span><span id="method-summary">成交额前100只 · 5分钟收益等权 · 指数连乘递推</span><span> / </span><button id="audit-latest" class="text-button">查看截面明细 ↗</button></p>
+  <dialog id="details">
+    <div class="dialog-heading"><h2 id="dialog-title">指标口径</h2><button id="close-dialog" class="close" aria-label="关闭">×</button></div>
+    <div id="dialog-content"></div>
+  </dialog>
+</body>
+</html>
